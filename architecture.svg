@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" width="1200" height="460" role="img" aria-labelledby="t d">
+  <title id="t">Arquitetura do G.A. Fitness</title>
+  <desc id="d">O Main (login e menus por perfil) chama os DAOs, que executam SQL no banco MySQL gafitness e devolvem objetos do model.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="460" rx="28" fill="#0b100e"/>
+  <rect width="1200" height="460" rx="28" fill="url(#grid)"/>
+  <rect width="1200" height="460" rx="28" fill="none" stroke="#1d2b24" stroke-width="2"/>
+
+  <g font-family="'Segoe UI', Arial, Helvetica, sans-serif">
+    <!-- caixa 1: Main -->
+    <rect x="60" y="60" width="320" height="272" rx="18" fill="#101a15" stroke="#24362d" stroke-width="2"/>
+    <text x="90" y="108" font-size="28" font-weight="700" fill="#f4f7f2">Main</text>
+    <text x="90" y="140" font-size="20" fill="#7f9a8b">login e menus por perfil</text>
+    <g font-family="SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace" font-size="20">
+      <rect x="90" y="170" width="260" height="38" rx="10" fill="#1b2a22"/>
+      <text x="106" y="196" fill="#a3e635">Gerente</text>
+      <rect x="90" y="218" width="260" height="38" rx="10" fill="#1b2a22"/>
+      <text x="106" y="244" fill="#a3e635">Funcionario</text>
+      <rect x="90" y="266" width="260" height="38" rx="10" fill="#1b2a22"/>
+      <text x="106" y="292" fill="#a3e635">Aluno</text>
+    </g>
+
+    <!-- seta 1 -->
+    <g stroke="#a3e635" stroke-width="4" stroke-linecap="round" fill="#a3e635">
+      <line x1="394" y1="185" x2="426" y2="185"/>
+      <polygon points="426,175 446,185 426,195" stroke="none"/>
+    </g>
+
+    <!-- caixa 2: DAO -->
+    <rect x="460" y="60" width="320" height="272" rx="18" fill="#101a15" stroke="#24362d" stroke-width="2"/>
+    <text x="490" y="108" font-size="28" font-weight="700" fill="#f4f7f2">DAO</text>
+    <text x="490" y="140" font-size="20" fill="#7f9a8b">SQL com PreparedStatement</text>
+    <g font-family="SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace" font-size="20" fill="#cfe3d6">
+      <text x="490" y="188">UsuarioDAO</text>
+      <text x="490" y="222">PlanosDAO</text>
+      <text x="490" y="256">MatriculasDAO</text>
+      <text x="490" y="290">TreinoDAO</text>
+    </g>
+
+    <!-- seta 2 -->
+    <g stroke="#a3e635" stroke-width="4" stroke-linecap="round" fill="#a3e635">
+      <line x1="794" y1="185" x2="826" y2="185"/>
+      <polygon points="826,175 846,185 826,195" stroke="none"/>
+    </g>
+
+    <!-- caixa 3: MySQL -->
+    <rect x="860" y="60" width="280" height="272" rx="18" fill="#101a15" stroke="#fbbf24" stroke-width="2"/>
+    <text x="890" y="108" font-size="28" font-weight="700" fill="#f4f7f2">MySQL</text>
+    <text x="890" y="140" font-size="20" fill="#7f9a8b">banco gafitness</text>
+    <g font-family="SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace" font-size="20" fill="#fbbf24">
+      <text x="890" y="188">usuarios</text>
+      <text x="890" y="222">planos</text>
+      <text x="890" y="256">matriculas</text>
+      <text x="890" y="290">treinos</text>
+    </g>
+
+    <!-- legenda -->
+    <text x="60" y="388" font-size="22" fill="#cfe3d6">O Main nunca escreve SQL: cada DAO recebe a Connection</text>
+    <text x="60" y="420" font-size="22" fill="#7f9a8b">e devolve objetos do model (Usuario, Planos, Matriculas, Treino).</text>
+  </g>
+</svg>
