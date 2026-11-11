@@ -11,6 +11,7 @@ import model.Usuario;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.SQLException;
 
 public class Main {
 
@@ -37,7 +38,7 @@ public class Main {
 
             switch (escolha) {
                 case 1:
-                    System.out.print("\nEmail: ");
+                    System.out.print("Email: ");
                     String email = sc.next();
                     System.out.print("Senha: ");
                     String senha = sc.next();
@@ -55,7 +56,7 @@ public class Main {
                             menuGerente(sc, usuarioDAO, matriculasDAO, planosDAO, treinoDAO);
                             break;
                         case "Funcionario":
-                            menuFuncionario(sc, treinoDAO);
+                            menuFuncionario(sc, usuario, treinoDAO, usuarioDAO);
                             break;
                         case "Aluno":
                             menuAluno(sc, usuario, treinoDAO);
@@ -103,17 +104,17 @@ public class Main {
                 case 1:
                     Usuario novo = new Usuario();
                     System.out.print("Nome: ");
-                    novo.setNome(sc.nextLine().trim());
+                    novo.setNome(sc.next());
                     System.out.print("Email: ");
-                    novo.setEmail(sc.nextLine().trim());
+                    novo.setEmail(sc.next().trim());
                     System.out.print("Senha: ");
-                    novo.setSenha(sc.nextLine().trim());
+                    novo.setSenha(sc.next().trim());
                     System.out.print("Tipo (Gerente/Funcionario/Aluno): ");
-                    novo.setTipo(sc.nextLine().trim());
+                    novo.setTipo(sc.next().trim());
                     System.out.print("Telefone: ");
-                    novo.setTelefone(sc.nextLine().trim());
+                    novo.setTelefone(sc.next().trim());
                     System.out.print("CPF: ");
-                    novo.setCpf(sc.nextLine().trim());
+                    novo.setCpf(sc.next().trim());
                     usuarioDAO.inserirUsuarios(novo);
                     System.out.println("Usuário processado.");
                     break;
@@ -122,32 +123,44 @@ public class Main {
                     List<Usuario> usuarios = usuarioDAO.ListarTodososUsuario();
                     if (usuarios.isEmpty()) System.out.println("Nenhum usuário cadastrado.");
                     for (Usuario u : usuarios) {
-                        System.out.println(u.getId() + "," + u.getNome() + "," + u.getEmail() + "," + u.getTipo() + " , " + u.getTelefone() + " , " + u.getCpf());
+                        System.out.println("Id: " + u.getId() + " | Nome: " + u.getNome() + " | Email: " + u.getEmail() + " | Tipo: " + u.getTipo() + " | Telefone:  " + u.getTelefone() + " | CPF:  " + u.getCpf());
                     }
                     break;
 
                 case 3:
                     System.out.print("CPF: ");
-                    Usuario encontrado = usuarioDAO.ConsultarPorCPF(sc.nextLine().trim());
+                    Usuario encontrado = usuarioDAO.ConsultarPorCPF(sc.next().trim());
                     if (encontrado == null) {
                         System.out.println("Usuário não encontrado.");
                     } else {
-                        System.out.println(encontrado.getId() + " | " + encontrado.getNome() + " | " + encontrado.getEmail()
-                                + " | " + encontrado.getTipo() + " | " + encontrado.getTelefone());
+                        System.out.println("Id: " + encontrado.getId() + " | Nome: " + encontrado.getNome() + " | Email: " + encontrado.getEmail()
+                                + " | Tipo: " + encontrado.getTipo() + " | Telefone: " + encontrado.getTelefone());
                     }
                     break;
 
                 case 4:
+                    System.out.println("--- Planos ---");
+                    System.out.println("1 - Básico");
+                    System.out.println("2 - Intermediario");
+                    System.out.println("3 - VIP");
+                    System.out.println("Informe o Id do usuario que quer fazer o plano: ");
+                    int usuario_id = sc.nextInt();
                     System.out.print("Nome do plano: ");
-                    String nomePlano = sc.nextLine().trim();
+                    String nomePlano = sc.next().trim();
                     System.out.print("Valor: ");
                     double valor = sc.nextDouble();
                     System.out.print("Duração (dias): ");
                     int dias = sc.nextInt();
-                    System.out.print("Status (Ativo/Inativo): ");
-                    String status = sc.nextLine().trim();
-                    planosDAO.CadastrarPlano(new Planos(nomePlano, valor, dias, status));
-                    System.out.println("Plano processado.");
+
+                    Planos plano = new Planos(usuario_id, nomePlano, valor, dias, "Ativo");
+                    int planoId = planosDAO.cadastrarPlano(plano);
+
+                    if (planoId == -1) {
+                        System.out.println("Erro ao cadastrar o plano.");
+                    } else {
+                        matriculasDAO.criarMatricula(usuario_id, planoId, dias);
+                        System.out.println("Plano cadastrado e matrícula criada!");
+                    }
                     break;
 
                 case 5:
@@ -156,9 +169,9 @@ public class Main {
                         System.out.println("Nenhuma matrícula encontrada.");
                     }
                     for (Matriculas m : matriculas) {
-                        System.out.println(m.getId() + " , " + m.getEmail() + " , " + m.getPlano()
-                                + " , R$ " + m.getValor() + " , " + m.getData_inicio()
-                                + " -> " + m.getData_fim() + " , " + m.getStatus());
+                        System.out.println("Id: " + m.getId() + " | Email: " + m.getEmail() + " | Plano: " + m.getPlano()
+                                + " | R$ " + m.getValor() + " | Data de Início:  " + m.getData_inicio()
+                                + " -> " + m.getData_fim() + " | Status:  " + m.getStatus());
                     }
                     break;
 
@@ -167,7 +180,9 @@ public class Main {
                     if (total == null) {
                         System.out.println("Não foi possivel Gerar o relatorio");
                     }
-                    System.out.printf("Faturamento do mês: R$ %.2f", total);
+                    else {
+                        System.out.printf("Faturamento do mês: R$ %.2f", total);
+                    }
                     break;
 
                 case 7:
@@ -184,11 +199,13 @@ public class Main {
         } while (escolha != 0);
     }
 
-    private static void menuFuncionario(Scanner sc, TreinoDAO treinoDAO) {
+    private static void menuFuncionario(Scanner sc, Usuario funcionario, TreinoDAO treinoDAO, UsuarioDAO usuarioDAO) {
         int escolha;
         do {
             System.out.println("\n--- MENU FUNCIONÁRIO ---");
             System.out.println("1 - Listar treinos");
+            System.out.println("2 - Criar treino");
+            System.out.println("3 - Ver id do cliente por CPF(Para Criar Treino)");
             System.out.println("0 - Logout");
             escolha = sc.nextInt();
 
@@ -196,15 +213,44 @@ public class Main {
                 case 1:
                     listarTreinos(treinoDAO.listarTreinos());
                     break;
+
+                case 2:
+                    System.out.print("Id do aluno: ");
+                    int alunoId = sc.nextInt();
+                    sc.nextLine(); // limpa o Enter que sobrou
+                    System.out.print("Nome do treino: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Descrição: ");
+                    String descricao = sc.nextLine();
+
+                    boolean criou = treinoDAO.criarTreino(alunoId, funcionario.getId(), nome, descricao);
+                    if (criou) {
+                        System.out.println("Treino criado com sucesso!");
+                    } else {
+                        System.out.println("Não foi possível criar o treino. Confira o id do aluno.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("CPF: ");
+                    Usuario encontrado = usuarioDAO.ConsultarPorCPF(sc.next().trim());
+                    if ( encontrado == null) {
+                        System.out.println("Usuário não encontrado.");
+                    } else {
+                        System.out.println("Id: " + encontrado.getId() + " | Nome: " + encontrado.getNome() + " | Email: " + encontrado.getEmail()
+                                + " | Tipo: " + encontrado.getTipo() + " | Telefone: " + encontrado.getTelefone());
+                    }
+                    break;
+
                 case 0:
                     break;
+
                 default:
                     System.out.println("Opção inválida!");
             }
         } while (escolha != 0);
     }
 
-    private static void menuAluno(Scanner sc, Usuario aluno, TreinoDAO treinoDAO) {
+    private static void menuAluno(Scanner sc, Usuario aluno, TreinoDAO treinoDAO)  {
         int escolha;
         do {
             System.out.println("\n--- MENU ALUNO ---");

@@ -53,4 +53,20 @@ public class TreinoDAO {
         return treinos;
     }
 
+    public boolean criarTreino(int alunoId, int funcionarioId, String nome, String descricao) {
+        String sql = "INSERT INTO treinos (aluno_id, funcionario_id, nome, descricao) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = CONEXAO_DB.prepareStatement(sql)) {
+            stmt.setInt(1, alunoId);
+            stmt.setInt(2, funcionarioId);
+            stmt.setString(3, nome);
+            stmt.setString(4, descricao);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erro ao criar treino: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

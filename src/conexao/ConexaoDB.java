@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexaoDB {
     public static final String URL_JDBC = "jdbc:mysql://localhost:3306/gafitness?allowMultiQueries=true";
     public static final String user = "root"; //TROCAR POR SENAI
-    public static final String senha = "*****"; // TROCAR PELA SENHA DO SENAI
+    public static final String senha = "****"; // TROCAR PELA SENHA DO SENAI
 
     //Conectar com o MYSQL
 

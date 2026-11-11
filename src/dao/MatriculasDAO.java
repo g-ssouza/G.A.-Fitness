@@ -1,6 +1,7 @@
 package dao;
 
 import model.Matriculas;
+import model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,6 +45,20 @@ public class MatriculasDAO {
             System.err.println("Erro ao Consultar Informações de todos os alunos :" + e.getMessage());
         }
         return listarInfoAlunos;
+    }
+
+    public void criarMatricula(int usuarioId, int planoId, int duracaoDias) {
+        String sql = "INSERT INTO matriculas (usuario_id, plano_id, data_inicio, data_fim, status) " +
+                "VALUES (?, ?, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL ? DAY), 'Ativa')";
+
+        try (PreparedStatement stmt = CONEXAO_DB.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            stmt.setInt(2, planoId);
+            stmt.setInt(3, duracaoDias);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erro ao criar matrícula: " + e.getMessage());
+        }
     }
 
 }

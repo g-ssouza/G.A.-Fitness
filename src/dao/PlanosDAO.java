@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class PlanosDAO {
     private final Connection CONEXAO_DB;
@@ -17,19 +19,25 @@ public class PlanosDAO {
     }
 
     //CADASTRAR PLANO
-    public void CadastrarPlano(Planos plano){
-        String sql = "INSERT INTO planos (plano, valor, duracao_dias, status) VALUES "+
-                "(?, ?, ?, ?);";
-        try(PreparedStatement stmt = CONEXAO_DB.prepareStatement(sql)){
-            stmt.setString(1, plano.getPlano());
-            stmt.setDouble(2, plano.getValor());
-            stmt.setInt(3, plano.getDuracao_dias());
-            stmt.setString(4, plano.getStatus());
+    public int cadastrarPlano(Planos plano) {
+        String sql = "INSERT INTO planos (usuario_id, plano, valor, duracao_dias, status) VALUES (?, ?, ?, ?, ?)";
 
+        try (PreparedStatement stmt = CONEXAO_DB.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, plano.getUsuario_id());
+            stmt.setString(2, plano.getPlano());
+            stmt.setDouble(3, plano.getValor());
+            stmt.setInt(4, plano.getDuracao_dias());
+            stmt.setString(5, plano.getStatus());
             stmt.executeUpdate();
-        }catch (SQLException e){
-            System.err.println("Erro ao cadastrar Plano: " + e.getMessage());
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao cadastrar plano: " + e.getMessage());
         }
+        return -1;
     }
 
     //Relátorio Mensal

@@ -2,12 +2,14 @@ package model;
 
 public class Planos {
     private int id;
+    private int usuario_id;
     private String plano;
     private double valor;
     private int duracao_dias;
     private String status;
 
-    public Planos(String plano, double valor, int duracao_dias, String status){
+    public Planos(int usuario_id, String plano, double valor, int duracao_dias, String status){
+        this.usuario_id = usuario_id;
         this.plano = plano;
         this.valor = valor;
         this.duracao_dias = duracao_dias;
@@ -20,6 +22,10 @@ public class Planos {
 
     public int getId() {
         return id;
+    }
+
+    public int getUsuario_id() {
+        return usuario_id;
     }
 
     public String getPlano() {
@@ -42,6 +48,10 @@ public class Planos {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setUsuario_id(int usuario_id) {
+        this.usuario_id = usuario_id;
     }
 
     public void setPlano(String plano) {

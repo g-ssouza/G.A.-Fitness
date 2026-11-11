@@ -20,6 +20,14 @@ public class Matriculas {
         this.data_fim = data_fim;
         this.status = status;
     }
+    public Matriculas(int usuario_id, String plano, double valor, String data_inicio, String status ){
+        this.usuario_id = usuario_id;
+        this.plano = plano;
+        this.valor = valor;
+        this.data_inicio = data_inicio;
+        this.status = status;
+
+    }
     public Matriculas(){}
 
     //Getters

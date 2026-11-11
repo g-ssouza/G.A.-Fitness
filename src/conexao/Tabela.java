@@ -23,10 +23,12 @@ public class Tabela {
 
                     "CREATE TABLE planos (" +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
+                    "usuario_id INT NOT NULL , " +
                     "plano VARCHAR(150) NOT NULL, " +
                     "valor DECIMAL(10,2) NOT NULL," +
                     "duracao_dias INT, " +
-                    "status ENUM('Ativo', 'Inativo'));" +
+                    "status ENUM('Ativo', 'Inativo')," +
+                    "FOREIGN KEY(usuario_id) REFERENCES usuarios(id));" +
 
                     "CREATE TABLE matriculas (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
