@@ -141,12 +141,5 @@ VALUES ('Admin', 'admin@gafitness.com', 'admin123', 'Gerente', '11999999999', '0
 
 ## Documentação
 
-O projeto tem uma documentação completa em Word, feita pelo grupo: `docs/Documentacao_GA_Fitness.docx` *(troque pelo nome real do arquivo)*. Ela cobre requisitos, modelagem, arquitetura, testes e conclusão.
+O projeto tem uma documentação completa em Word, feita pelo grupo: `Documentacao_GA_Fitness.docx`.
 
-## O que falta
-
-- [ ] Matricular aluno em um plano
-- [ ] Criar e editar treinos
-- [ ] Alterar senha pelo menu
-- [ ] Guardar senhas com hash em vez de texto puro
-- [ ] Página HTML/CSS que simula o terminal
